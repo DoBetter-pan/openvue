@@ -1,0 +1,15 @@
+[Unit]
+Description=The vue service based on OpenResty
+After=syslog.target network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=forking
+PIDFile=/opt/openresty/openvue/logs/openvue.pid
+ExecStartPre=
+ExecStart=/opt/openresty/openvue/bin/openvue.sh start
+ExecReload=/opt/openresty/openvue/bin/openvue.sh reload
+ExecStop=/opt/openresty/openvue/bin/openvue.sh stop
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

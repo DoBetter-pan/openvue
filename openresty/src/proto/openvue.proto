@@ -1,0 +1,329 @@
+/** 
+ * @file sohuSSP.proto
+ * @brief 
+ * @author yingx
+ * @date 2019-08-08
+ */
+
+syntax = "proto2";
+
+package sohussp;
+
+message Request {
+    // 协议版本号
+    optional int32 version = 1;
+
+    // 广告引擎生产的唯一标识
+    optional string impid = 2;
+
+    // 广告位信息
+    message Impression {
+        // 广告位在此次请求中的编号
+        optional int32 idx = 1;
+        // 广告位ID: 90000:sf; 90001:oad; 90002:pad; 90003:mad; 90004:ead; 90005:角标; 90006:控制栏; 90007:创可贴; 90008:缩框; 90009:静帧前广告位
+        optional string adpid = 2;
+        // 广告位位置: oad1:前贴1; oad2:前贴2; cp_102_1:通栏102_1; ...
+        optional string pos = 3;
+        // 广告位在屏幕上的位置: FIRST_VIEW; OTHER_VIEW
+        optional int32 screenlocation = 4;
+        // 特型模板。如果没有提供format字段，则此字段表示精确要求的特型模板，否则表示推荐的特型模板
+        optional string sample = 5;
+        // 广告位支持的广告类型: 0:banner; 1:video
+        optional int32 type = 6;
+        // 广告位支持的创意类型: 1:图片; 2:Flash; 3:HTML; 4:mp4
+        repeated int32 mimes = 7;
+        // 广告位高度。如果没有提供format字段，则此字段表示精确要求的高度，否则表示推荐的高度
+        optional int32 h = 8;
+        // 广告位宽度。如果没有提供format字段，则此字段表示精确要求的宽度，否则表示推荐的宽度
+        optional int32 w = 9;
+        // 广告位允许的最大广告时长
+        optional int32 maxduration = 10;
+        // 底价
+        optional int32 bidfloor = 11;
+        // 广告引擎出价
+        optional int32 adsprice = 12;
+        // Preferred deals
+        optional int64 dspid = 13;
+        // 订单号
+        optional string campaignid = 14;
+        // 排期包
+        optional string lineid = 15;
+        // 退回用户(true:投放周期内不向DSP发送被DSP退回用户的广告请求)
+        optional bool rejectuser = 16;
+        // 整单全周期内, 用户请求频次上限(小于1不做频次限制)
+        optional int32 maxreqfeq = 17;
+        // 订单失效日期(yyyy-mm-dd)
+        optional string enddate = 18;
+        // true表示是因为备选广告产生的请求
+        optional bool is_backup = 19;
+        // SperoFormat 数组，用以表示所有可接受的尺寸，如果没有提供该字段，则以 h 和 w 定义的尺寸为准
+        message Format {
+            // 可接受的广告位宽度
+            optional int32 w = 1;
+            // 可接受的广告位高度
+            optional int32 h = 2;
+            // 可接受的特型模板
+            optional string sample = 3;
+        }
+        repeated Format format = 20;
+        // 推送频控标记（true:做推送频控，false:不做推送频控）
+        optional bool send_freq_ctl_flag = 21;
+        // 投放系统中虚拟执行单的广告ID，用来做推送频控
+        optional string fake_adid = 22;
+        // 交易类型，PDB = 1; PD = 1; RTB 
+        optional string trade_type = 23;
+        // 打底流量类型，0：常规，1：PDB，2：PD，3：RTB
+        optional string backup_type = 24;
+        // 是否支持deeplink
+        optional bool is_support_deeplink = 25;
+        // 是否区域包版
+        optional bool is_areadirect = 26;
+        // 支持搜狗多模板
+        optional string multisample = 27;
+    }
+    repeated Impression imps = 3;
+
+    // 流量类型
+    message Flow {
+        // 流量类型：0：正常流量，1：预览流量， 2：压测流量
+        optional int32 type = 1;
+        // 流量来源：ssp, spero
+        optional string from = 2;
+        // 是否为https请求
+        optional bool is_https = 3;
+    }
+    optional Flow flow = 4;
+
+    // 站点信息
+    message Site {
+       // 站点名称: "SOHU","SOHU_NEWS_APP","SOHU_WAP","SOHU_TV","SOHU_TV_APP","SOHU_TV_WAP","56", "56_WAP","SOHU_TV_OTT","SOHU_NEWS_WAP"
+       optional string name = 1;
+       // 当前页面URL
+       optional string page = 2;
+       // Referrer URL
+       optional string ref = 3;
+       // 内容标题
+       optional string title = 4;
+       // 门户频道
+       optional string newschn = 5;
+       // 门户频道分类
+       repeated int64 cat = 6;
+       // 视频频道: TV频道;S频道;56频道;PGC;...
+       optional string tvchn = 7;
+       // 视频频道分类
+       repeated string vrs = 8;
+       // 视频对象
+       message Video {
+           // 专辑
+           optional string album = 1;
+           // 类型: 长视频,播客,新闻,自媒体
+           optional string type = 2;
+           // 时长(单位: 秒)
+           optional int32 duration = 3;
+           // 产地: 美国,英国,...
+           optional string place = 4;
+           // 视频vid
+           optional int64 vid = 5;
+           // 视频类型，1代表PGC，2+保留扩展
+           optional int32 vtype = 6;
+       }
+       optional Video video = 9;
+    }
+    optional Site site = 5;
+
+    // app信息
+    message App {
+        // APP名称
+        optional string name = 1;
+        // APP bundle
+        optional string bundle = 2;
+        // APP版本号
+        optional string app_version = 3;
+        // SDK版本号
+        optional string sdk_version = 4;
+        // APP安装渠道
+        optional string appchn = 5;
+    }
+    optional App app = 6;
+
+    // 设备信息
+    message Device {
+        // 设备类型: "PC","Mobile","Wap","TV"
+        optional string type = 1;
+        // 移动端类型: "iPhone","iPad","AndroidPhone","AndroidPad"
+        optional string mobiletype = 2;
+        // 设备IP(引擎用来判断投放地域的IP)
+        optional string ip = 3;
+        // 浏览器userAgent
+        optional string ua = 4;
+        // 上网方式: "WIFI","3G","2G"
+        optional string nettype = 5;
+        // 国际移动设备标识
+        optional string imei = 6;
+        // 国际移动用户识别码(储存在SIM卡中)
+        optional string imsi = 7;
+        // 媒体访问控制地址(物理地址|硬件地址)
+        optional string mac = 8;
+        // androidID
+        optional string androidid = 9;
+        // iOS中的广告标识符
+        optional string idfa = 10;
+        // openUDID
+        optional string openudid = 11;
+        // 操作系统版本号
+        optional string osv = 12;
+        // 运营商
+        optional string carrier = 13;
+        // 设备屏幕分辨率高
+        optional int32 h = 14;
+        // 设备屏幕分辨率宽
+        optional int32 w = 15;
+        // 终端品牌
+        optional string brand = 16;
+        // 终端机型
+        optional string model = 17;
+	// HMS Core版本号
+	optional string huawei_hms_version = 18;
+	// 应用市场版本号
+	optional string store_version = 19;
+    }
+    optional Device device = 7;
+
+    // 用户信息
+    message User {
+        // 用户在搜狐PC端页面中的唯一标识
+        optional string suv = 1;
+        // 用户在搜狐新闻客户端的唯一标识
+        optional string cid = 2;
+        // 用户在搜狐手搜端的唯一标识
+        optional string smuid = 3;
+        // 用户在搜狗的唯一标识
+        optional string yyid = 4;
+        // 当前用户的所有标签号
+        repeated int64 cat = 5;
+        // 用户搜索词
+        repeated string searchkeywords = 6;
+        // 用户所在地域(最精确的数字编码)
+        optional string loc = 7;
+        // 用户在搜狐新闻客户端的H5唯一标识
+        optional string h5cid = 8;
+    }
+    optional User user = 8;
+
+    // 扩展对象
+    message Extension {
+        // APP媒体定向条件
+        optional string appmedia = 1;
+        // 异常流量类型
+        optional string cheattype = 2;
+        // 浏览器信息
+        optional string browser_info = 3;
+    }
+    optional Extension ext = 9;
+}
+
+message Response {
+    // 协议版本号
+    optional int32 version = 1;
+    // 广告引擎生成的唯一标识
+    optional string impid = 2;
+    // 广告信息
+    message Ad {
+        // 广告位在此次请求中的编号, 对应Impression.idx;
+        optional int32 idx = 1;
+        // 广告URL
+        optional string adurl = 2;
+        // 落地页
+        optional string landing = 3;
+        // DSP展示监测,示例: [{"time":"7","url":"www.default.display.com"},{"tag":"admaster","time":"9","url":"www.admaster.display.com"}], 已废弃
+        optional string displaymonitor = 4;
+        // DSP点击监测,示例: [{"tag":"default", "url":"www.default.click.com"}], 已废弃
+        optional string clickmonitor = 5;
+        // 广告素材类型
+        optional string admtype = 6;
+        // 创意ID
+        optional string crid = 7;
+        // 广告主ID
+        optional string advid = 8;
+        // Monitor key
+        optional string monitorkey = 9;
+        // 广告位ID
+        optional string adpid = 10;
+        // 流量类型
+        optional string sspid = 11;
+        // 第一高价
+        optional int32 firstprice = 12;
+        // 第二高价
+        optional int32 secondprice = 13;
+        // 广告尺寸(宽*10000+高)
+        optional int32 size = 14;
+        // 广告时长
+        optional int32 duration = 15;
+        // 竞价等级: RTB,PMP,PDB
+        optional string rtblevel = 16;
+        // adcode(特型广告返回adcode)
+        optional string adcode = 17;
+        // PDB流量是否成功发送给DSP标识
+        optional bool is_send = 18;
+        // 视频文字素材
+        optional string adtxt = 19;
+        // 商品信息等广告素材参数，json格式的字符串
+        optional string ad_para = 20;
+        // 广告来源标识
+        optional string dsp_source = 21;
+        // 针对一次曝光机会，ADX随机生成的唯一ID
+        optional string bidid = 22;
+        // 市场标签
+        optional string markettag = 23;
+        // 用户标签组ID，多个ID之间用英文逗号分隔
+        optional string tgids = 24;
+        // 模板名称
+        optional string sample = 25;
+        // 创意数据
+        optional string creative_data = 26;
+        // 视频引擎上报中增加中长尾广告标识
+        optional int64 dspid = 27;
+        // dsp 状态
+        optional int32 dsp_status = 28;
+        // 排期包，新引擎上报中添加排期包ID上报
+        optional string lineid = 29;
+        // 创意内容
+        message Creative {
+            // 创意元素名称
+            optional string name = 1;
+            // 创意元素属性
+            message Attr {
+                // 创意元素属性名称
+                optional string key = 1;
+                // 创意元素属性值
+                optional string value = 2;
+            }
+            repeated Attr attr = 2;
+        }
+        repeated Creative creatives = 30;
+        // 检测信息
+        message Monitor {
+            // 监测地址，普通字符串，例如："www.default.display.com"
+            optional string url = 1;
+            // 监测机构，普通字符串，例如："miaozhen"
+            optional string tag = 2;
+            // 监测时间(展示监测包含第几秒监测)，32位整数，单位：秒
+            optional int32 time = 3;
+        }
+        // DSP展示监测，保留displaymonitor做兼容，后续将废弃displaymonitor
+        repeated Monitor display_monitor = 31;
+        // DSP点击监测，保留clickmonitor做兼容，后续将废弃clickmonitor
+        repeated Monitor click_monitor = 32;
+        // pvlog
+        optional string pvlog = 33;
+        // adx下发的deeplink
+        optional string deeplink = 34;
+        // DSP价格加密key
+        optional string dspkey = 35;
+        // 保存一些特殊回传参数，比如搜狗adx对接中的pvid，采用json格式
+        optional string ext = 36;
+        // 调试信息
+        optional string debug_message = 37;
+    }
+    repeated Ad ads = 3;
+}
