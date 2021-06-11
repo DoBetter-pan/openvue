@@ -15,7 +15,7 @@ const toolsRouter = {
       component: () => import('@/views/tools/json'),
       name: 'JsonTool',
       meta: {
-        title: 'Json', noCache: true 
+        title: 'Json', noCache: true
       }
     },
     {
@@ -23,7 +23,7 @@ const toolsRouter = {
       component: () => import('@/views/tools/md5'),
       name: 'Md5Tool',
       meta: {
-        title: 'Md5', noCache: true 
+        title: 'Md5', noCache: true
       }
     },
     {
@@ -31,7 +31,7 @@ const toolsRouter = {
       component: () => import('@/views/tools/stock'),
       name: 'StockTool',
       meta: {
-        title: 'Stock' 
+        title: 'Stock'
       }
     }
   ]
