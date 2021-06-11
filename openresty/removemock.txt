@@ -1,0 +1,29 @@
+1、vim vueelement/vue.config.js 
+在devServer中增加
+    // before: require('./mock/mock-server.js')
+    proxy: {
+      // change xxx-api/login => mock/login
+      // detail: https://cli.vuejs.org/config/#devserver-proxy
+      [process.env.VUE_APP_BASE_API]: {
+        target: `http://10.19.36.137:${port}`,
+        changeOrigin: true,
+        pathRewrite: {
+          ["^" + process.env.VUE_APP_BASE_API]: ""
+        }
+      }
+      // "/api": {
+      //   target: `http://192.168.81.129:${port}`,
+      //   changeOrigin: true,
+      //   pathRewrite: {
+      //     "^/api": ""
+      //   }
+      // }
+    }
+
+2、vim vueelement/src/main.js
+注释掉
+if (process.env.NODE_ENV === 'production') {
+    const { mockXHR } = require('../mock')
+        mockXHR()
+}
+
