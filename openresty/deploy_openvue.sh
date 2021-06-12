@@ -10,10 +10,13 @@ if [ ! -d ${workdir} ]; then
 fi
 ./bin/install.sh
 echo "copy...."
-sed -i "s/listen 80;/listen 7654;/g" ${workdir}/conf/openvue.conf
+#sed -i "s/listen 80;/listen 7654;/g" ${workdir}/conf/openvue.conf
 
 #web
-cp $bashpath/vueelement/dist/* ${workdir}/html/openvue -fr
+if [ ! -d ${workdir}/html/openvue ]; then
+    mkdir -p ${workdir}/html/openvue
+fi
+cp -fr $bashpath/vueelement/dist/* ${workdir}/html/openvue
 
 echo "switch to test mode...."
 ./bin/openvue.sh reload
