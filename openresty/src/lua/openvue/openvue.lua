@@ -7,6 +7,7 @@
 
 local cjson = require "cjson"
 local str = require "utils.str"
+local lang = require "openvue.lang"
 local prot_json = require "openvue.prot_json"
 local prot_pb = require "openvue.prot_pb"
 local handlers = require "openvue.handlers"
@@ -14,10 +15,10 @@ local handlers = require "openvue.handlers"
 local function queryService(context)
     local data = {}
     local found = false
-    local args = str.split(context.req.uri, '/')
-    if #args >= 4 then
-        context.req.module = args[3]
-        context.req.action = args[4]
+    local path = str.split(context.req.uri, '/')
+    if #path >= 4 then
+        context.req.module = path[3]
+        context.req.action = path[4]
         if handlers.handler_map[context.req.module] then
             found = true
             data = handlers.handler_map[context.req.module].handle(context)
@@ -25,7 +26,7 @@ local function queryService(context)
     end
     if not found then
         data.status = 50007
-        data.message = 'Wrong Parameter'
+        data.message = lang.L("wrong parameter")
     end
     return data
 end
@@ -59,6 +60,7 @@ local function serve()
 
     context.req.method = ngx.req.get_method()
     context.req.uri = ngx.var.uri
+    context.req.args = ngx.req.get_uri_args() or {}
 
     if ngx.req.get_method() == 'POST' then
         ngx.req.read_body()

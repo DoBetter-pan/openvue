@@ -5,9 +5,13 @@
 -- @date 2021-06-10
 --------------------------
 
+local cjson = require "cjson"
+local lang = require "openvue.lang"
+
 local function handleLogin(context)
     local data = {}
 
+    ngx.log(ngx.CRIT, "===============XXX>" .. cjson.encode(context.params))
     data.code = 20000
     data.data = {}
     data.data.token = "admin-token"
@@ -28,9 +32,19 @@ local function handleInfo(context)
     return data
 end
 
+local function handleLogout(context)
+    local data = {}
+
+    data.code = 20000
+    data.data = {}
+
+    return data
+end
+
 local actions = {
     login = handleLogin,
     info = handleInfo,
+    logout = handleLogout,
 }
 
 local function handle(context)
@@ -43,7 +57,7 @@ local function handle(context)
     end
     if not found then
         data.status = 50007
-        data.message = 'Wrong Parameter'
+        data.message = lang.L("wrong parameter")
     end
 
     return data
