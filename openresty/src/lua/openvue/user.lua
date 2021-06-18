@@ -6,15 +6,26 @@
 --------------------------
 
 local cjson = require "cjson"
+local xxtea = require "xxtea"
+local db = require "utils.mysql"
+local conf = require "openvue.conf"
 local lang = require "openvue.lang"
 
 local function handleLogin(context)
     local data = {}
 
-    ngx.log(ngx.CRIT, "===============XXX>" .. cjson.encode(context.params))
-    data.code = 20000
-    data.data = {}
-    data.data.token = "admin-token"
+    local sql = string.format("SELECT b.password FROM account a, user b WHERE a.user_id = b.id AND a.deleted = 0 AND b.deleted = 0 AND a.open_code = '%s'", context.params.username)
+    local passwords = db.query(conf.db_option, sql, 10)
+    if passwords and passwords[1] and passwords[1].password == context.params.password then
+        local val = string.format("%d:%s:%s", ngx.now(), context.params.username, context.params.password)
+        local token = xxtea.encrypt(val, "Adp201609203059Z")
+        data.code = 20000
+        data.data = {}
+        data.data.token = token
+    else
+        data.code = 60204
+        data.message = 'Account and password are incorrect'
+    end
 
     return data
 end

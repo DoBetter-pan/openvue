@@ -194,5 +194,8 @@ module.exports = {
       objectsInObjects: false
     }],
     'array-bracket-spacing': [2, 'never']
+  },
+  "globals": {
+    "md5": true
   }
 }
