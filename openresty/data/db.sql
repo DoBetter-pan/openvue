@@ -205,3 +205,73 @@ CHARACTER SET = utf8
 COLLATE = utf8_general_ci
 COMMENT = '角色权限'
 ;
+
+10、股票
+
+CREATE TABLE `stock`  (
+    `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+    `code` VARCHAR(36) NULL DEFAULT '' COMMENT '编号',
+    `name` VARCHAR(36) NULL DEFAULT '' COMMENT '名称',
+    `description` VARCHAR(2048) NULL DEFAULT '' COMMENT '简介',
+    `province` VARCHAR(36) NULL DEFAULT '' COMMENT '所在省',
+    `city` VARCHAR(36) NULL DEFAULT '' COMMENT '所在城市',
+    `industry_id` BIGINT(20) NULL DEFAULT 0 COMMENT '行业ID',
+    `price` BIGINT(20) NULL DEFAULT 0 COMMENT '单价',
+    `total_number` BIGINT(20) NULL DEFAULT 0 COMMENT '总股数',
+    `total_price` BIGINT(20) NULL DEFAULT 0 COMMENT '总市值',
+    `last_unlocked_date` DATETIME(0) NULL DEFAULT '1970-01-01 00:00:00' COMMENT '最近解禁日期',
+    `last_unlocked_number` BIGINT(20) NULL DEFAULT 0 COMMENT '最近解禁股数',
+    `created` DATETIME(0) NULL DEFAULT '1970-01-01 00:00:00' COMMENT '创建时间',
+    `creator` VARCHAR(36) NULL DEFAULT '' COMMENT '创建人',
+    `edited` DATETIME(0) NULL DEFAULT '1970-01-01 00:00:00' COMMENT '修改时间',
+    `editor` VARCHAR(36) NULL DEFAULT '' COMMENT '修改人',
+    `deleted` TINYINT(1) NULL DEFAULT 0 COMMENT '逻辑删除:0=未删除,1=已删除',
+    PRIMARY KEY (`id`)
+)
+ENGINE = InnoDB
+AUTO_INCREMENT = 1
+CHARACTER SET = utf8
+COLLATE = utf8_general_ci
+COMMENT = '股票权限'
+;
+
+11、公司
+
+CREATE TABLE `company`  (
+    `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+    `code` VARCHAR(36) NULL DEFAULT '' COMMENT '编号',
+    `name` VARCHAR(36) NULL DEFAULT '' COMMENT '名称',
+    `description` VARCHAR(2048) NULL DEFAULT '' COMMENT '简介',
+    `province` VARCHAR(36) NULL DEFAULT '' COMMENT '所在省',
+    `city` VARCHAR(36) NULL DEFAULT '' COMMENT '所在城市',
+    `industry_id` BIGINT(20) NULL DEFAULT 0 COMMENT '行业ID',
+    `price` BIGINT(20) NULL DEFAULT 0 COMMENT '单价',
+    `percent_this_year` BIGINT(20) NULL DEFAULT 0 COMMENT '今年涨幅',
+    `percent_last_year` BIGINT(20) NULL DEFAULT 0 COMMENT '过去1年涨幅',
+    `percent_last2_year` BIGINT(20) NULL DEFAULT 0 COMMENT '过去2年涨幅',
+    `pe_last_year` BIGINT(20) NULL DEFAULT 0 COMMENT '去年PE',
+    `pe` BIGINT(20) NULL DEFAULT 0 COMMENT '当前PE',
+    `market_value` BIGINT(20) NULL DEFAULT 0 COMMENT '总市值',
+    `ROE` BIGINT(20) NULL DEFAULT 0 COMMENT 'ROE',
+    `gross_profit` BIGINT(20) NULL DEFAULT 0 COMMENT '毛利润',
+    `revenue` BIGINT(20) NULL DEFAULT 0 COMMENT '营业额',
+    `profit` BIGINT(20) NULL DEFAULT 0 COMMENT '利润',
+    `yoy_revenue` BIGINT(20) NULL DEFAULT 0 COMMENT '营业额同比',
+    `yoy_profit` BIGINT(20) NULL DEFAULT 0 COMMENT '利润同比',
+    `qoq_revenue` BIGINT(20) NULL DEFAULT 0 COMMENT '营业额环比',
+    `qoq_profit` BIGINT(20) NULL DEFAULT 0 COMMENT '利润环比',
+    `last_unlocked_date` DATETIME(0) NULL DEFAULT '1970-01-01 00:00:00' COMMENT '最近解禁日期',
+    `last_unlocked_number` BIGINT(20) NULL DEFAULT 0 COMMENT '最近解禁股数',
+    `created` DATETIME(0) NULL DEFAULT '1970-01-01 00:00:00' COMMENT '创建时间',
+    `creator` VARCHAR(36) NULL DEFAULT '' COMMENT '创建人',
+    `edited` DATETIME(0) NULL DEFAULT '1970-01-01 00:00:00' COMMENT '修改时间',
+    `editor` VARCHAR(36) NULL DEFAULT '' COMMENT '修改人',
+    `deleted` TINYINT(1) NULL DEFAULT 0 COMMENT '逻辑删除:0=未删除,1=已删除',
+    PRIMARY KEY (`id`)
+)
+ENGINE = InnoDB
+AUTO_INCREMENT = 1
+CHARACTER SET = utf8
+COLLATE = utf8_general_ci
+COMMENT = '股票权限'
+;
